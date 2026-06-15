@@ -22,14 +22,22 @@ $(document).ready(function() {
 	var $newPassword = $("#password_policy #new_password"),
 		$confirmPassword = $("#password_policy #confirm_password"),
 		$submit = $("#password_policy #submit"),
+		$mismatchMessage = $("#password-mismatch-message"),
+		mismatchMessageId = "password-mismatch-message",
 		check = function() {
 		if ($confirmPassword.val() !== '' && $newPassword.val() !== $confirmPassword.val()) {
 			$newPassword.addClass('password-mismatch');
 			$confirmPassword.addClass('password-mismatch');
+			$newPassword.attr('aria-invalid', 'true');
+			$confirmPassword.attr('aria-invalid', 'true').attr('aria-describedby', mismatchMessageId);
+			$mismatchMessage.removeAttr('hidden');
 			$submit.attr('disabled', 'disabled');
 		} else {
 			$newPassword.removeClass('password-mismatch');
 			$confirmPassword.removeClass('password-mismatch');
+			$newPassword.removeAttr('aria-invalid');
+			$confirmPassword.removeAttr('aria-invalid').removeAttr('aria-describedby');
+			$mismatchMessage.attr('hidden', 'hidden');
 			$submit.removeAttr('disabled');
 		}
 	};

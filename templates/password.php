@@ -70,6 +70,7 @@ style('password_policy', 'styles');
 			<label for="confirm_password" class="infield"><?php p($l->t('Confirm new password'));?></label>
 			<input type="password" id="confirm_password" name="confirm_password" value="" placeholder="<?php p($l->t('Confirm new password'));?>"/>
 		</div>
+		<div id="password-mismatch-message" class="warning" role="alert" aria-live="assertive" hidden><?php p($l->t('The passwords do not match.'));?></div>
 		<?php if ($_['password_requirements']) {?>
 			<div id="password_hint" class="warning">
 				<h1><?php p($l->t('Password requirements:'));?></h1>
