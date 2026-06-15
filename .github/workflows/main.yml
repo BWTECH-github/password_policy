@@ -1,3 +1,4 @@
+# Modified by BW-Tech GmbH: CI runs against PHP 8.4 (owncloud.online plugin fork).
 name: CI
 
 on:
@@ -19,7 +20,7 @@ concurrency:
 
 env:
   APP_NAME: password_policy
-  PHP_VERSIONS: '["8.3"]'
+  PHP_VERSIONS: '["8.4"]'
 
 jobs:
   get-vars:
