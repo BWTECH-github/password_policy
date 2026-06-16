@@ -28,7 +28,7 @@
 
 #password_policy #confirm_password.password-mismatch,
 #password_policy #new_password.password-mismatch {
-	color: red;
+	color: #c00000;
 }
 
 #password_policy #submit {
