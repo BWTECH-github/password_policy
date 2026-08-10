@@ -19,9 +19,9 @@ This is a PHP 8.4 fork maintained by BW-Tech GmbH for owncloud.online.</descript
 	<documentation>
 		<admin>https://doc.owncloud.com/server/latest/admin_manual/configuration/server/security/password_policy.html</admin>
 	</documentation>
-	<website>https://github.com/GrossLukas/password_policy</website>
-	<bugs>https://github.com/GrossLukas/password_policy/issues</bugs>
-	<repository type="git">https://github.com/GrossLukas/password_policy.git</repository>
+	<website>https://github.com/BWTECH-github/password_policy</website>
+	<bugs>https://github.com/BWTECH-github/password_policy/issues</bugs>
+	<repository type="git">https://github.com/BWTECH-github/password_policy.git</repository>
 	<dependencies>
                 <owncloud min-version="11" max-version="11.99" />
                 <php min-version="8.4" />
