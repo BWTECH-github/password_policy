@@ -15,7 +15,7 @@ Password history and expiration policies are supplements that allow IT to establ
 Administrators find the configuration options in the 'Security' section of the owncloud.online administration settings panel. The respective policies are designed for local user accounts created by administrators or via the Guests extension, not for user accounts imported from LDAP or other user backends as these provide their own mechanisms. For more information and recommendations when deploying policies in an existing owncloud.online, please consult the owncloud.online Documentation.
 
 This is a PHP 8.4 fork maintained by BW-Tech GmbH for owncloud.online.</description>
-	<version>2.3.0</version>
+	<version>2.3.1</version>
 	<documentation>
 		<admin>https://github.com/BWTECH-github/password_policy#readme</admin>
 	</documentation>
