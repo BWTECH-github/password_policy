@@ -1,13 +1,99 @@
-# Password Policy
+# Passwortrichtlinie
 
-[![Build Status](https://drone.owncloud.com/api/badges/owncloud/password_policy/status.svg?branch=master)](https://drone.owncloud.com/owncloud/password_policy)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=owncloud_password_policy&metric=alert_status)](https://sonarcloud.io/dashboard?id=owncloud_password_policy)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=owncloud_password_policy&metric=security_rating)](https://sonarcloud.io/dashboard?id=owncloud_password_policy)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=owncloud_password_policy&metric=coverage)](https://sonarcloud.io/dashboard?id=owncloud_password_policy)
+Legt fest, wie Passwörter aussehen müssen — für Benutzerkonten ebenso wie für
+Passwörter auf öffentlichen Links. Dazu kommen Ablauffristen, ein
+Passwortverlauf und Erinnerungen per E-Mail.
 
-The Password Policy extension enables ownCloud administrators to define password requirements like minimum characters, numbers, capital letters and more for all kinds of password endpoints like user account and public link sharing passwords. To add another layer of security, the administrator can enforce maximum expiration dates for public link shares depending on whether a password has been set or not. As a further measure the extension saves a history of hashed user passwords to prevent users from choosing a former password again, enforcing password security even more. Users can also be required to change their password upon first login. To impose regular password changes administrators can set up password expiration policies. For this users can be notified via email, web interface and the ownCloud Clients when their password is about to expire and when it has expired.
+## Was geprüft wird
 
-The definition of certain password rules support administrators in the task of ensuring a minimum level of password security throughout the enterprise. It minimizes the risk of weak user passwords and therefore adds an additional security aspect to ownCloud. The expiration date policies for public link shares allow users to depart from general public link expiration policies. Users can, for instance, be allowed to create longer-lasting public link shares when they choose to set a password. This way IT can provide more flexibility in external sharing while staying in full control.
-Password history and expiration policies are supplements that allow IT to establish a level of password security that can comply with corporate guidelines of all sorts. The provided tools enable administrators to granularly choose their desired security level. At this point it is important to keep in mind that high levels of security might sacrifice usability and come at the expense of user experience. For this reason it is highly recommended to check [best practices](https://pages.nist.gov/800-63-3/sp800-63b.html) and decide carefully on the hurdles that are put upon users in order to maintain and optimize user adoption and satisfaction.
+**Aufbau des Passworts**
 
-Administrators find the configuration options in the 'Security' section of the ownCloud administration settings panel. The respective policies are designed for local user accounts created by administrators or via the [Guests](https://marketplace.owncloud.com/apps/guests) extension, not for user accounts imported from LDAP or other user backends as these provide their own mechanisms. For more information and recommendations when deploying policies in an existing ownCloud, please consult the [ownCloud Documentation](https://doc.owncloud.com/server/latest/admin_manual/configuration/server/security/password_policy.html).
+| Regel | Schlüssel | Bedeutung |
+| --- | --- | --- |
+| Mindestlänge | `spv_min_chars_value` | wie viele Zeichen mindestens |
+| Kleinbuchstaben | `spv_lowercase_value` | wie viele mindestens |
+| Großbuchstaben | `spv_uppercase_value` | wie viele mindestens |
+| Ziffern | `spv_numbers_value` | wie viele mindestens |
+| Sonderzeichen | `spv_special_chars_value` | wie viele mindestens |
+| Erlaubte Sonderzeichen | `spv_def_special_chars_value` | welche Zeichen als Sonderzeichen gelten |
+
+Jede Regel hat einen zugehörigen Schalter `…_checked`; ohne ihn bleibt der Wert
+wirkungslos.
+
+**Verlauf und Ablauf**
+
+| Regel | Schlüssel | Bedeutung |
+| --- | --- | --- |
+| Passwortverlauf | `spv_password_history_value` | wie viele frühere Passwörter gesperrt bleiben |
+| Ablauf des Benutzerpassworts | `spv_user_password_expiration_value` | nach wie vielen Tagen ein neues Passwort fällig wird |
+| Ablauf öffentlicher Links mit Passwort | `spv_expiration_password_value` | Höchstdauer in Tagen |
+| Ablauf öffentlicher Links ohne Passwort | `spv_expiration_nopassword_value` | Höchstdauer in Tagen |
+
+Die getrennten Fristen für Links mit und ohne Passwort sind der eigentliche
+Gewinn: Wer ein Passwort setzt, darf den Link länger leben lassen.
+
+## Voraussetzungen
+
+* owncloud.online 11.x
+* PHP 8.4
+* laufender Cron für die Ablauf-Benachrichtigungen
+
+## Installation
+
+Über den Market, oder von Hand:
+
+```bash
+cd /var/www/owncloud.online/apps
+git clone https://github.com/BWTECH-github/password_policy.git
+chown -R www-data:www-data password_policy
+sudo -u www-data php8.4 ../occ app:enable password_policy
+```
+
+## Einstellungen
+
+Einstellungen → Sicherheit. Jede Regel wird einzeln eingeschaltet und mit einem
+Wert versehen. Alternativ per Kommandozeile:
+
+```bash
+sudo -u www-data php8.4 occ config:app:set password_policy spv_min_chars_checked --value=on
+sudo -u www-data php8.4 occ config:app:set password_policy spv_min_chars_value --value=12
+```
+
+## Kommandozeile
+
+```bash
+# Passwort eines Kontos sofort als abgelaufen markieren
+sudo -u www-data php8.4 occ user:expire-password <benutzer>
+```
+
+Beim nächsten Anmelden muss dieses Konto ein neues Passwort setzen.
+
+Der Hintergrundauftrag `OCA\PasswordPolicy\Jobs\PasswordExpirationNotifierJob`
+verschickt die Erinnerungen vor dem Ablauf. Er braucht einen funktionierenden
+Cron.
+
+## Geltungsbereich
+
+Die Regeln gelten für lokale Konten — also für Konten, die Administratoren
+anlegen, und für Gastkonten. Konten aus LDAP oder anderen Backends bringen ihre
+eigenen Regeln mit; dort greift diese App nicht.
+
+## Fehlersuche
+
+| Symptom | Ursache | Abhilfe |
+| --- | --- | --- |
+| Regel wirkt nicht | zugehöriger `…_checked`-Schalter fehlt | Schalter setzen |
+| Keine Ablauf-E-Mails | Cron läuft nicht oder E-Mail-Versand ist nicht eingerichtet | `occ background:cron`, Mail-Einstellungen prüfen |
+| LDAP-Nutzer unbetroffen | so gewollt | Regeln im Verzeichnisdienst setzen |
+
+## Ein Wort zur Abwägung
+
+Sehr strenge Regeln erzeugen Zettel am Monitor. Die Empfehlungen des NIST
+(SP 800-63B) raten zu Länge statt zu Zeichenklassen-Akrobatik und zu
+Ablauffristen nur bei begründetem Verdacht. Wer die Regeln setzt, sollte das
+mit Blick auf die eigenen Vorgaben abwägen.
+
+## Herkunft
+
+Fork der gleichnamigen ownCloud-App, gepflegt von der BW-Tech GmbH für
+owncloud.online und PHP 8.4. Lizenz: AGPLv3.
