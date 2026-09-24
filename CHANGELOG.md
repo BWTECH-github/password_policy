@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
+## [2.3.2] - 2026-09-24
+
+### Fixed
+
+- Kontrast der Fehlermarkierung: Stimmen neues Kennwort und Bestätigung nicht
+  überein, färbt die Seite beide Felder jetzt in `#c00000` statt `red`.
+  Reines Rot erreicht auf Weiß nur etwa 4:1 und verfehlt WCAG 2.1 AA (4,5:1).
+  Der Fix stand schon vor 2.3.1 im Repository (efc349a), das SaaS-Bündel trug
+  unter derselben Nummer 2.3.1 aber noch den alten Stand. Die eigene Nummer
+  macht den Unterschied auf einer Instanz sichtbar. Sonst keine Änderung
+  gegenüber dem gebündelten 2.3.1 (abgesehen von Kopfkommentaren).
+
 ## [2.3.1] - 2026-08-13
 
 ### Changed
