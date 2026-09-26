@@ -18,6 +18,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
   nichts. Die Übernahme steht im Serverprotokoll, samt Hinweis, dass die Regeln
   hier auch für Kennwörter öffentlicher Links gelten. War die App in der alten
   Datenbank schon installiert (Update-Weg), läuft der Schritt nicht.
+- README und Klassenkommentar nennen die übrigen Unterschiede zu `security`
+  (Mindestlänge in Zeichen statt Bytes, Groß- und Kleinbuchstaben nach
+  Unicode), den Update-Weg aus der Enterprise-Fassung 1.x (gleiche
+  `spv_*`-Schlüssel) und `occ app:enable password_policy` nach dem Upgrade,
+  weil die App nicht standardmäßig eingeschaltet ist.
 
 ## [2.3.2] - 2026-09-24
 

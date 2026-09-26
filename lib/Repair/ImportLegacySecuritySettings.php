@@ -44,6 +44,13 @@ use OCP\Migration\IRepairStep;
  * Benutzerkennwörter, diese App wendet dieselben Regeln auch auf Kennwörter
  * öffentlicher Links an. Das steht deshalb im Protokoll.
  *
+ * Die Regeln selbst zählen hier anders als in "security": Die Mindestlänge
+ * zählt Zeichen (mb_strlen) statt Bytes (strlen), Groß- und Kleinbuchstaben
+ * werden nach Unicode erkannt statt nur im ASCII-Bereich. Ein Kennwort aus
+ * sieben Umlauten (14 Bytes) erfüllte bei "security" eine Mindestlänge von 10,
+ * hier nicht. Das wirkt erst bei der nächsten Kennwortänderung; bestehende
+ * Kennwörter bleiben gültig.
+ *
  * Der Schritt läuft nur bei der Erstinstallation (repair-steps/install): War
  * password_policy in der alten Datenbank schon installiert, gilt ihr eigener
  * Stand - auch wenn das "keine Regeln" ist. Übernommen wird außerdem nur,
