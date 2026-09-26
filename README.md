@@ -59,6 +59,27 @@ sudo -u www-data php8.4 occ config:app:set password_policy spv_min_chars_checked
 sudo -u www-data php8.4 occ config:app:set password_policy spv_min_chars_value --value=12
 ```
 
+## Umzug von einer älteren Instanz
+
+Regeln (`spv_*` in `oc_appconfig`), Kennwortverlauf (`oc_user_password_history`)
+und die Merker je Konto (`oc_preferences`, `appid=password_policy`) werden nach
+einem Umzug der Datenbank unverändert weiter gelesen. Die Einträge im
+Kennwortverlauf sind mit `password_hash` gebildet und hängen an keinem Wert der
+`config.php`.
+
+Kommt die Datenbank noch aus der Zeit der Vorgänger-App **security** (ownCloud
+bis 10.0.8), stehen deren Regeln unter `appid=security`
+(`min_password_length`, `enforce_upper_lower_case`,
+`enforce_numeric_characters`, `enforce_special_characters`). Wird
+password_policy auf so einer Datenbank zum ersten Mal installiert und hat noch
+keinen `spv_*`-Schlüssel, übernimmt sie diese Regeln (Reparaturschritt
+`ImportLegacySecuritySettings`, Hinweis im Serverprotokoll). Ohne gespeicherte
+Länge gilt wie bei security die Mindestlänge 8. Achtung: security prüfte nur
+Kontokennwörter, password_policy wendet die Regeln auch auf Kennwörter
+öffentlicher Links an. Eigene Werte werden nie überschrieben, der Altbestand
+bleibt liegen. War die App in der alten Datenbank schon installiert, gilt ihr
+eigener Stand.
+
 ## Kommandozeile
 
 ```bash

@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
+## [2.3.3] - 2026-09-26
+
+### Added
+
+- Umzug alter Datenbanken: Wird die App auf einer Datenbank erstmals
+  installiert, in der noch die Vorgänger-App `security` (ownCloud bis 10.0.8)
+  Kennwortregeln hinterlassen hat, übernimmt der Reparaturschritt
+  `ImportLegacySecuritySettings` sie in die `spv_*`-Schlüssel: Mindestlänge
+  (ohne gespeicherten Wert wie bei `security` 8), Groß- und Kleinbuchstaben,
+  Ziffern, Sonderzeichen. Nur wenn die App noch keinen `spv_*`-Schlüssel hat;
+  nichts wird überschrieben, der Altbestand bleibt liegen, ein zweiter Lauf tut
+  nichts. Die Übernahme steht im Serverprotokoll, samt Hinweis, dass die Regeln
+  hier auch für Kennwörter öffentlicher Links gelten. War die App in der alten
+  Datenbank schon installiert (Update-Weg), läuft der Schritt nicht.
+
 ## [2.3.2] - 2026-09-24
 
 ### Fixed
