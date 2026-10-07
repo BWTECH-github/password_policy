@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
+## [2.3.4] - 2026-10-07
+
+Redesign-Linie (Zweig `redesign`): enthält main bis 2.3.3.
+
+### Fixed
+
+- Sprache: Die Warnung „The passwords do not match.“ auf der Seite „Passwort abgelaufen“ und die Sprachausgabe „Allowed special characters“ in der Verwaltung fehlten in allen deutschen Katalogen.
+- Sprache: „Passwort Anforderungen:“ heißt „Passwortanforderungen:“; „Dein/Deine“ in den Ablaufhinweisen klein.
+- de_CH: die Passwortanforderungen („Mindestens %n Zeichen“, Klein-/Großbuchstaben, Ziffern, Sonderzeichen) fehlten und erschienen englisch; jetzt aus de, Schweizer Schreibung ohne ß.
+
 ## [2.3.3] - 2026-09-26
 
 ### Added
