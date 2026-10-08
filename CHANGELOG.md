@@ -4,6 +4,48 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
+## [2.3.4] - 2026-10-07
+
+Redesign-Linie (Zweig `redesign`): enthält main bis 2.3.3.
+
+### Fixed
+
+- Sprache: Die Warnung „The passwords do not match.“ auf der Seite „Passwort abgelaufen“ und die Sprachausgabe „Allowed special characters“ in der Verwaltung fehlten in allen deutschen Katalogen.
+- Sprache: „Passwort Anforderungen:“ heißt „Passwortanforderungen:“; „Dein/Deine“ in den Ablaufhinweisen klein.
+- de_CH: die Passwortanforderungen („Mindestens %n Zeichen“, Klein-/Großbuchstaben, Ziffern, Sonderzeichen) fehlten und erschienen englisch; jetzt aus de, Schweizer Schreibung ohne ß.
+
+## [2.3.3] - 2026-09-26
+
+### Added
+
+- Umzug alter Datenbanken: Wird die App auf einer Datenbank erstmals
+  installiert, in der noch die Vorgänger-App `security` (ownCloud bis 10.0.8)
+  Kennwortregeln hinterlassen hat, übernimmt der Reparaturschritt
+  `ImportLegacySecuritySettings` sie in die `spv_*`-Schlüssel: Mindestlänge
+  (ohne gespeicherten Wert wie bei `security` 8), Groß- und Kleinbuchstaben,
+  Ziffern, Sonderzeichen. Nur wenn die App noch keinen `spv_*`-Schlüssel hat;
+  nichts wird überschrieben, der Altbestand bleibt liegen, ein zweiter Lauf tut
+  nichts. Die Übernahme steht im Serverprotokoll, samt Hinweis, dass die Regeln
+  hier auch für Kennwörter öffentlicher Links gelten. War die App in der alten
+  Datenbank schon installiert (Update-Weg), läuft der Schritt nicht.
+- README und Klassenkommentar nennen die übrigen Unterschiede zu `security`
+  (Mindestlänge in Zeichen statt Bytes, Groß- und Kleinbuchstaben nach
+  Unicode), den Update-Weg aus der Enterprise-Fassung 1.x (gleiche
+  `spv_*`-Schlüssel) und `occ app:enable password_policy` nach dem Upgrade,
+  weil die App nicht standardmäßig eingeschaltet ist.
+
+## [2.3.2] - 2026-09-24
+
+### Fixed
+
+- Kontrast der Fehlermarkierung: Stimmen neues Kennwort und Bestätigung nicht
+  überein, färbt die Seite beide Felder jetzt in `#c00000` statt `red`.
+  Reines Rot erreicht auf Weiß nur etwa 4:1 und verfehlt WCAG 2.1 AA (4,5:1).
+  Der Fix stand schon vor 2.3.1 im Repository (efc349a), das SaaS-Bündel trug
+  unter derselben Nummer 2.3.1 aber noch den alten Stand. Die eigene Nummer
+  macht den Unterschied auf einer Instanz sichtbar. Sonst keine Änderung
+  gegenüber dem gebündelten 2.3.1 (abgesehen von Kopfkommentaren).
+
 ## [2.3.1] - 2026-08-13
 
 ### Changed

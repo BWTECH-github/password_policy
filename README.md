@@ -59,6 +59,53 @@ sudo -u www-data php8.4 occ config:app:set password_policy spv_min_chars_checked
 sudo -u www-data php8.4 occ config:app:set password_policy spv_min_chars_value --value=12
 ```
 
+## Umzug von einer älteren Instanz
+
+Regeln (`spv_*` in `oc_appconfig`), Kennwortverlauf (`oc_user_password_history`)
+und die Merker je Konto (`oc_preferences`, `appid=password_policy`) werden nach
+einem Umzug der Datenbank unverändert weiter gelesen. Die Einträge im
+Kennwortverlauf sind mit `password_hash` gebildet und hängen an keinem Wert der
+`config.php`.
+
+Kommt die Datenbank noch aus der Zeit der Vorgänger-App **security** (ownCloud
+bis 10.0.8), stehen deren Regeln unter `appid=security`
+(`min_password_length`, `enforce_upper_lower_case`,
+`enforce_numeric_characters`, `enforce_special_characters`). Wird
+password_policy auf so einer Datenbank zum ersten Mal installiert und hat noch
+keinen `spv_*`-Schlüssel, übernimmt sie diese Regeln (Reparaturschritt
+`ImportLegacySecuritySettings`, Hinweis im Serverprotokoll). Ohne gespeicherte
+Länge gilt wie bei security die Mindestlänge 8. Eigene Werte werden nie
+überschrieben, der Altbestand bleibt liegen. War die App in der alten Datenbank
+schon installiert, gilt ihr eigener Stand.
+
+Unterschiede zu security, die der Administrator kennen muss:
+
+- security prüfte nur Kontokennwörter, password_policy wendet die Regeln auch
+  auf Kennwörter öffentlicher Links an.
+- Die Mindestlänge zählt hier Zeichen, security zählte Bytes. Kennwörter mit
+  Umlauten oder anderen Nicht-ASCII-Zeichen können die Länge deshalb verfehlen,
+  die sie bei security erfüllt haben (sieben Umlaute sind 7 Zeichen, aber 14
+  Bytes).
+- Groß- und Kleinbuchstaben werden hier nach Unicode erkannt, security kannte
+  nur A–Z und a–z.
+
+Das wirkt erst bei der nächsten Kennwortänderung; niemand wird ausgesperrt.
+
+Die App ist nicht standardmäßig eingeschaltet. Kennt die alte Datenbank sie
+noch nicht, installiert `occ upgrade` sie deshalb nicht; die Übernahme läuft
+erst, wenn sie nach dem Upgrade eingeschaltet wird:
+
+```bash
+sudo -u www-data php8.4 occ app:enable password_policy
+```
+
+Kommt die Datenbank von der Enterprise-Fassung 1.x (gleiche App-ID), ist das
+der Update-Weg: 1.x verwendete dieselben `spv_*`-Schlüssel im selben Format
+(Mindestlänge, Großbuchstaben, Ziffern, Sonderzeichen samt erlaubter Auswahl,
+Ablauf von Links mit und ohne Kennwort), sie werden unverändert weiter gelesen.
+Die Regel für Kleinbuchstaben gab es dort noch nicht; die Tabelle für den
+Kennwortverlauf legt das Update an.
+
 ## Kommandozeile
 
 ```bash
