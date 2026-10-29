@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
+## [2.3.5] - 2026-10-29
+
+### Fixed
+
+- Sicherheit verbessert.
+- Verwaltung: Kartentitel wie die übrigen Karten, Karte über die volle
+  Breite, Kästchen und Zahlenfelder bleiben in jeder Breite in einer Spalte,
+  Speichern ist der Hauptknopf der Karte.
+- Seite „Passwort abgelaufen“: gleiche Abstände zwischen den Feldern,
+  Fehlermeldungen rot, Speichern so breit wie die Felder.
+
 ## [2.3.4] - 2026-10-07
 
 Redesign-Linie (Zweig `redesign`): enthält main bis 2.3.3.

@@ -18,26 +18,90 @@
  *
  */
 
-#password-policy input[type='number'] {
-	width: 40px;
+/* --- Verwaltung (Sicherheit) -------------------------------------------
+   Viel Text je Regel: die Karte nimmt beide Spalten des Kartenrasters,
+   auf halber Breite brach jede Beschriftung zweimal um. */
+#body-settings.oco-shell #app-content[class*='oco-bereich-'] #password-policy {
+	grid-column: 1 / -1;
 }
 
-#password_policy .indented {
-	margin-left: 24px;
+#password-policy ul {
+	margin: 0 0 var(--oco-space-2, 8px);
+	padding: 0;
+	list-style: none;
+}
+
+#password-policy li {
+	margin: 0 0 var(--oco-space-2, 8px);
+}
+
+/* Die Zeilen [Kaestchen][Zahl][Text] legt der Kern als Flex-Reihe an
+   (owncloud-online-screens.css, Abschnitt password_policy). Bricht der Text
+   um, schrumpften Kaestchen und Zahlenfeld mit (gemessen 15 statt 24 px bei
+   390 px Breite) und die Spalten verrutschten - sie behalten ihre Groesse. */
+#password-policy li > label > input {
+	flex-shrink: 0;
+}
+
+#password-policy li > label > span {
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+#password-policy input[type='number'] {
+	width: 80px;
+	margin: 0;
+}
+
+#password-policy .indented {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--oco-space-2, 8px) 0;
+}
+
+#password-policy #spv_def_special_chars_value {
+	width: 160px;
+	max-width: 100%;
+	margin: 0;
+}
+
+#password-policy .margin-add-top {
+	margin-top: var(--oco-space-5, 20px);
+}
+
+#password-policy .pp-actions {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--oco-space-2, 8px) var(--oco-space-4, 16px);
+	margin-top: var(--oco-space-4, 16px);
+}
+
+#password-policy .pp-actions input[type='submit'] {
+	margin: 0;
+}
+
+/* --- Seite "Passwort abgelaufen" (Gastseite) ---------------------------- */
+
+/* Der Kern setzt nur .grouptop/.groupbottom der Anmeldeseite auf margin 0;
+   .groupmiddle behielt 1.2rem aus dem Altstil - der Abstand vor
+   "Neues Passwort bestaetigen" war groesser als die anderen. */
+#body-login .v-align #password_policy .groupmiddle {
+	margin: 0;
+}
+
+/* Fehler wie auf der Anmeldeseite rot, nicht als neutraler Kasten */
+#body-login .v-align #password_policy #error.warning,
+#body-login .v-align #password_policy #password-mismatch-message.warning {
+	background: var(--oco-danger-bg, #fff5f5);
+	border-color: var(--oco-danger-border, #f5c2c2);
+	color: var(--oco-danger-ink, #8a1f1f);
 }
 
 #password_policy #confirm_password.password-mismatch,
 #password_policy #new_password.password-mismatch {
-	color: #c00000;
-}
-
-#password_policy #submit {
-	margin: 5px;
-	width : calc(100% - 10px);
-}
-
-#password_policy .margin-add-top {
-	margin-top: 24px;
+	color: var(--oco-danger-ink, #b23b3b);
 }
 
 #password_policy #password_hint {

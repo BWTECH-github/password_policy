@@ -372,4 +372,33 @@ class PasswordControllerTest extends TestCase {
 		);
 		self::assertSame($redirect_url, $redirectResponse->getRedirectURL());
 	}
+
+	public function providesRedirectTargets() {
+		return [
+			'lokaler Pfad' => ['/index.php/apps/files/?dir=/Documents', '/index.php/apps/files/?dir=/Documents'],
+			'relativer Pfad' => ['redirect/target', 'redirect/target'],
+			'fremde Adresse' => ['https://evil.example/login', 'http://cloud.example/'],
+			'ohne Schema' => ['//evil.example/login', 'http://cloud.example/'],
+			'Rueckstrich' => ['/\evil.example/login', 'http://cloud.example/'],
+			'Skript' => ['javascript:alert(1)', 'http://cloud.example/'],
+			'Steuerzeichen' => ["/\t/evil.example", 'http://cloud.example/'],
+			'leer' => ['', 'http://cloud.example/'],
+		];
+	}
+
+	/**
+	 * @dataProvider providesRedirectTargets
+	 */
+	public function testUpdateRedirectsOnlyWithinInstance($target, $expected) {
+		$user = $this->createMock(IUser::class);
+		$user->method('getUID')->willReturn('testuid');
+		$user->method('setPassword')->willReturn(true);
+		$this->userSession->method('getUser')->willReturn($user);
+		$this->userManager->method('checkPassword')->willReturn(true);
+		$this->urlGenerator->method('getAbsoluteURL')->with('')->willReturn('http://cloud.example/');
+
+		$response = $this->c->update('oldsecret', 'newsecret', 'newsecret', $target);
+		self::assertInstanceOf(RedirectResponse::class, $response);
+		self::assertSame($expected, $response->getRedirectURL());
+	}
 }

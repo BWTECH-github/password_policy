@@ -27,10 +27,11 @@ script('password_policy', 'ajax');
 ?>
 
 <div class="section" id="password-policy">
+	<?php /* Ueberschrift als direktes Kind der Karte: nur so greift der
+		Kartentitel des Kerns (.section > h2) - im Formular stand sie in der
+		alten 22-px-Schrift. */ ?>
+	<h2><?php p($l->t('Password and public link expiration policies'));?></h2>
 	<form id="password_policy" method="post">
-		<h2>
-			<?php p($l->t('Password and public link expiration policies'));?>
-		</h2>
 		<p>
 			<?php p($l->t('Minimum password requirements for user accounts and public links:'));?>
 		</p>
@@ -124,7 +125,9 @@ script('password_policy', 'ajax');
 			</li>
 		</ul>
 		<input type="hidden" name="requesttoken" value="<?php p($_['requesttoken']) ?>" id="requesttoken">
-		<input type="submit" value="<?php p($l->t('Save'));?>" />
-		<span class="msg"></span>
+		<div class="pp-actions">
+			<input type="submit" class="oco-btn-primary" value="<?php p($l->t('Save'));?>" />
+			<span class="msg" role="status" aria-live="polite"></span>
+		</div>
 	</form>
 </div>
