@@ -36,13 +36,9 @@
 }
 
 /* Die Zeilen [Kaestchen][Zahl][Text] legt der Kern als Flex-Reihe an
-   (owncloud-online-screens.css, Abschnitt password_policy). Bricht der Text
-   um, schrumpften Kaestchen und Zahlenfeld mit (gemessen 15 statt 24 px bei
-   390 px Breite) und die Spalten verrutschten - sie behalten ihre Groesse. */
-#password-policy li > label > input {
-	flex-shrink: 0;
-}
-
+   (owncloud-online-screens.css, Abschnitt password_policy); dort behalten
+   Kaestchen und Zahlenfeld beim Umbruch auch ihre Groesse. Nur der Text
+   darf schrumpfen. */
 #password-policy li > label > span {
 	flex: 1 1 auto;
 	min-width: 0;
@@ -83,13 +79,6 @@
 }
 
 /* --- Seite "Passwort abgelaufen" (Gastseite) ---------------------------- */
-
-/* Der Kern setzt nur .grouptop/.groupbottom der Anmeldeseite auf margin 0;
-   .groupmiddle behielt 1.2rem aus dem Altstil - der Abstand vor
-   "Neues Passwort bestaetigen" war groesser als die anderen. */
-#body-login .v-align #password_policy .groupmiddle {
-	margin: 0;
-}
 
 /* Fehler wie auf der Anmeldeseite rot, nicht als neutraler Kasten */
 #body-login .v-align #password_policy #error.warning,
