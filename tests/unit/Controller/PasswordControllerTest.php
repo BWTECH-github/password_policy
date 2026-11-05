@@ -372,4 +372,67 @@ class PasswordControllerTest extends TestCase {
 		);
 		self::assertSame($redirect_url, $redirectResponse->getRedirectURL());
 	}
+
+	public function providesRedirectTargets() {
+		$startPage = 'http://cloud.example/';
+		return [
+			'Pfad der Instanz' => ['/index.php/apps/files/?dir=/Documents', '/index.php/apps/files/?dir=/Documents'],
+			'relativer Pfad' => ['redirect/target', 'redirect/target'],
+			'fremde Adresse' => ['https://evil.example/login', $startPage],
+			'fremde Adresse in Großbuchstaben' => ['HTTPS://evil.example/login', $startPage],
+			'ohne Schema' => ['//evil.example/login', $startPage],
+			'Rückstrich' => ['/\\evil.example/login', $startPage],
+			'zwei Rückstriche' => ['\\\\evil.example/login', $startPage],
+			'Leerzeichen davor' => [' //evil.example/login', $startPage],
+			'Skript' => ['javascript:alert(1)', $startPage],
+			'Steuerzeichen' => ["/\t/evil.example/login", $startPage],
+			'Zeilenumbruch' => ["/index.php\r\nSet-Cookie: a=b", $startPage],
+			'leer' => ['', $startPage],
+			'fehlt' => [null, $startPage],
+			'kein Text' => [['/index.php'], $startPage],
+		];
+	}
+
+	/**
+	 * @dataProvider providesRedirectTargets
+	 */
+	public function testUpdateRedirectsOnlyWithinInstance($target, $expected) {
+		$user = $this->createMock(IUser::class);
+		$user->method('getUID')->willReturn('testuid');
+		$user->method('setPassword')->willReturn(true);
+		$this->userSession->method('getUser')->willReturn($user);
+		$this->userManager->method('checkPassword')->willReturn(true);
+		$this->urlGenerator->method('getAbsoluteURL')->with('')->willReturn('http://cloud.example/');
+
+		$response = $this->c->update('oldsecret', 'newsecret', 'newsecret', $target);
+
+		self::assertInstanceOf(RedirectResponse::class, $response);
+		self::assertSame($expected, $response->getRedirectURL());
+	}
+
+	/**
+	 * Das Formular schickt das Ziel als verstecktes Feld zurück; schon die
+	 * Seite darf dort nur ein Ziel innerhalb der Instanz eintragen.
+	 *
+	 * @dataProvider providesRedirectTargets
+	 */
+	public function testPasswordPageKeepsOnlyLocalRedirectTarget($target, $expected) {
+		$controller = new PasswordController(
+			'password_policy',
+			$this->request,
+			$this->userSession,
+			$this->userManager,
+			$this->config,
+			$this->session,
+			$this->urlGenerator,
+			$this->l10n,
+			$this->configProvider
+		);
+		$this->urlGenerator->method('getAbsoluteURL')->with('')->willReturn('http://cloud.example/');
+
+		$response = $controller->show($target);
+
+		self::assertInstanceOf(TemplateResponse::class, $response);
+		self::assertSame($expected, $response->getParams()['redirect_url']);
+	}
 }

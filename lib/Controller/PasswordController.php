@@ -106,9 +106,7 @@ class PasswordController extends Controller implements IAccountModuleController 
 				$params['firstLogin'] = true;
 			}
 		}
-		if (empty($params['redirect_url'])) {
-			$params['redirect_url'] = $this->urlGenerator->getAbsoluteURL('');
-		}
+		$params['redirect_url'] = $this->localRedirectUrl($params['redirect_url']);
 		if ($error) {
 			$params['error'] = $error;
 		}
@@ -193,6 +191,27 @@ class PasswordController extends Controller implements IAccountModuleController 
 		if ($this->config->getUserValue($user->getUID(), 'password_policy', 'firstLoginPasswordChange')) {
 			$this->config->deleteUserValue($user->getUID(), 'password_policy', 'firstLoginPasswordChange');
 		}
-		return new RedirectResponse($redirect_url);
+		return new RedirectResponse($this->localRedirectUrl($redirect_url));
+	}
+
+	/**
+	 * Rücksprungziel nach der Passwortänderung: nur relative Ziele innerhalb
+	 * dieser Instanz. Adressen mit Schema, mit fremdem Host („//host“, „/\host“)
+	 * oder mit Steuerzeichen ersetzt die Startseite.
+	 *
+	 * @param mixed $redirectUrl
+	 * @return string
+	 */
+	private function localRedirectUrl($redirectUrl): string {
+		$redirectUrl = \is_string($redirectUrl) ? \trim($redirectUrl) : '';
+		// Browser lesen „\“ in Adressen wie „/“ („/\host“ gilt als „//host“)
+		$normalized = \str_replace('\\', '/', $redirectUrl);
+		if ($redirectUrl === ''
+			|| \preg_match('#^[a-z][a-z0-9+.\-]*:#i', $redirectUrl) === 1
+			|| \strncmp($normalized, '//', 2) === 0
+			|| \preg_match('/[\x00-\x1f\x7f]/', $redirectUrl) === 1) {
+			return (string)$this->urlGenerator->getAbsoluteURL('');
+		}
+		return $redirectUrl;
 	}
 }
