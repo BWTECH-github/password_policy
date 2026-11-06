@@ -195,20 +195,20 @@ class PasswordController extends Controller implements IAccountModuleController 
 	}
 
 	/**
-	 * Ruecksprungziel nach der Passwortaenderung nur innerhalb dieser Instanz.
-	 * Relative Pfade bleiben; Adressen mit Schema, mit fremdem Host ("//host",
-	 * "/\host") oder mit Steuerzeichen werden durch die Startseite ersetzt.
+	 * Rücksprungziel nach der Passwortänderung: nur relative Ziele innerhalb
+	 * dieser Instanz. Adressen mit Schema, mit fremdem Host („//host“, „/\host“)
+	 * oder mit Steuerzeichen ersetzt die Startseite.
 	 *
 	 * @param mixed $redirectUrl
 	 * @return string
 	 */
 	private function localRedirectUrl($redirectUrl): string {
-		$redirectUrl = \trim((string)$redirectUrl);
-		// Browser lesen "\" in Adressen wie "/" ("/\host" = "//host")
-		$normalisiert = \str_replace('\\', '/', $redirectUrl);
+		$redirectUrl = \is_string($redirectUrl) ? \trim($redirectUrl) : '';
+		// Browser lesen „\“ in Adressen wie „/“ („/\host“ gilt als „//host“)
+		$normalized = \str_replace('\\', '/', $redirectUrl);
 		if ($redirectUrl === ''
 			|| \preg_match('#^[a-z][a-z0-9+.\-]*:#i', $redirectUrl) === 1
-			|| \strncmp($normalisiert, '//', 2) === 0
+			|| \strncmp($normalized, '//', 2) === 0
 			|| \preg_match('/[\x00-\x1f\x7f]/', $redirectUrl) === 1) {
 			return (string)$this->urlGenerator->getAbsoluteURL('');
 		}
