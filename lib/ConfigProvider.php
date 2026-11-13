@@ -22,6 +22,7 @@
 
 namespace OCA\PasswordPolicy;
 
+use OCA\PasswordPolicy\Controller\SettingsController;
 use OCP\IConfig;
 
 class ConfigProvider {
@@ -56,7 +57,7 @@ class ConfigProvider {
 
 		foreach ($configKeys as $configKey) {
 			if ($this->config->getAppValue('password_policy', $configKey.'_checked', null) === 'on') {
-				$passwordRequirements[$configKey.'_value'] = $this->config->getAppValue('password_policy', $configKey.'_value', null);
+				$passwordRequirements[$configKey.'_value'] = $this->config->getAppValue('password_policy', $configKey.'_value', (string)SettingsController::DEFAULTS[$configKey.'_value']);
 			}
 		}
 
