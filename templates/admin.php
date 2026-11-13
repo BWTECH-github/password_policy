@@ -39,31 +39,31 @@ script('password_policy', 'ajax');
 			<li>
 				<label>
 					<input type="checkbox" name="spv_min_chars_checked" <?php if ($_['spv_min_chars_checked']): ?> checked="checked"<?php endif; ?>>
-					<input type="number" name="spv_min_chars_value" min="1" max="255" value="<?php p($_['spv_min_chars_value']) ?>"> <?php p($l->t('minimum characters'));?>
+					<input type="number" name="spv_min_chars_value" aria-label="<?php p($l->t('minimum characters')); ?>" min="1" max="255" value="<?php p($_['spv_min_chars_value']) ?>"> <?php p($l->t('minimum characters'));?>
 				</label>
 			</li>
 			<li>
 				<label>
 					<input type="checkbox" name="spv_lowercase_checked" <?php if ($_['spv_lowercase_checked']): ?> checked="checked"<?php endif; ?>>
-					<input type="number" name="spv_lowercase_value" min="1" max="255" value="<?php p($_['spv_lowercase_value']) ?>"> <?php p($l->t('lowercase letters'));?>
+					<input type="number" name="spv_lowercase_value" aria-label="<?php p($l->t('lowercase letters')); ?>" min="1" max="255" value="<?php p($_['spv_lowercase_value']) ?>"> <?php p($l->t('lowercase letters'));?>
 				</label>
 			</li>
 			<li>
 				<label>
 					<input type="checkbox" name="spv_uppercase_checked" <?php if ($_['spv_uppercase_checked']): ?> checked="checked"<?php endif; ?>>
-					<input type="number" name="spv_uppercase_value" min="1" max="255" value="<?php p($_['spv_uppercase_value']) ?>"> <?php p($l->t('uppercase letters'));?>
+					<input type="number" name="spv_uppercase_value" aria-label="<?php p($l->t('uppercase letters')); ?>" min="1" max="255" value="<?php p($_['spv_uppercase_value']) ?>"> <?php p($l->t('uppercase letters'));?>
 				</label>
 			</li>
 			<li>
 				<label>
 					<input type="checkbox" name="spv_numbers_checked" <?php if ($_['spv_numbers_checked']): ?> checked="checked"<?php endif; ?>>
-					<input type="number" name="spv_numbers_value" min="1" max="255" value="<?php p($_['spv_numbers_value']) ?>"> <?php p($l->t('numbers'));?>
+					<input type="number" name="spv_numbers_value" aria-label="<?php p($l->t('numbers')); ?>" min="1" max="255" value="<?php p($_['spv_numbers_value']) ?>"> <?php p($l->t('numbers'));?>
 				</label>
 			</li>
 			<li>
 				<label>
 					<input type="checkbox" name="spv_special_chars_checked" <?php if ($_['spv_special_chars_checked']): ?> checked="checked"<?php endif; ?>>
-					<input type="number" name="spv_special_chars_value" min="1" max="255" value="<?php p($_['spv_special_chars_value']) ?>"> <?php p($l->t('special characters'));?>
+					<input type="number" name="spv_special_chars_value" aria-label="<?php p($l->t('special characters')); ?>" min="1" max="255" value="<?php p($_['spv_special_chars_value']) ?>"> <?php p($l->t('special characters'));?>
 				</label>
 			</li>
 			<li class="indented">
@@ -81,20 +81,20 @@ script('password_policy', 'ajax');
 			<li>
 				<label>
 					<input type="checkbox" name="spv_password_history_checked" <?php if ($_['spv_password_history_checked']): ?> checked="checked"<?php endif; ?>>
-					<input type="number" name="spv_password_history_value" min="0" max="255" value="<?php p($_['spv_password_history_value']) ?>"> <?php p($l->t('last passwords should not be used'));?>
+					<input type="number" name="spv_password_history_value" aria-label="<?php p($l->t('last passwords should not be used')); ?>" min="0" max="255" value="<?php p($_['spv_password_history_value']) ?>"> <?php p($l->t('last passwords should not be used'));?>
 				</label>
 			</li>
 			<li>
 				<label>
 					<input type="checkbox" name="spv_user_password_expiration_checked" <?php if ($_['spv_user_password_expiration_checked']): ?> checked="checked"<?php endif; ?>/>
-					<input type="number" name="spv_user_password_expiration_value"  min="0" value="<?php p($_['spv_user_password_expiration_value']) ?>" placeholder="90"/>
+					<input type="number" name="spv_user_password_expiration_value" aria-label="<?php p($l->t('days until user password expires')); ?>"  min="0" value="<?php p($_['spv_user_password_expiration_value']) ?>" placeholder="90"/>
 					<span><?php p($l->t('days until user password expires'));?></span>
 				</label>
 			</li>
 			<li>
 				<label>
 					<input type="checkbox" name="spv_user_password_expiration_notification_checked" <?php if ($_['spv_user_password_expiration_notification_checked']): ?> checked="checked"<?php endif; ?>/>
-					<input type="number" name="spv_user_password_expiration_notification_value"  min="0" value="<?php p($_['spv_user_password_expiration_notification_value']) ?>" placeholder="30"/>
+					<input type="number" name="spv_user_password_expiration_notification_value" aria-label="<?php p($l->t('days before password expires, users will receive a reminder notification')); ?>"  min="0" value="<?php p($_['spv_user_password_expiration_notification_value']) ?>" placeholder="30"/>
 					<span><?php p($l->t('days before password expires, users will receive a reminder notification'));?></span>
 				</label>
 			</li>
@@ -112,14 +112,14 @@ script('password_policy', 'ajax');
 			<li>
 				<label>
 					<input type="checkbox" name="spv_expiration_password_checked" <?php if ($_['spv_expiration_password_checked']): ?> checked="checked"<?php endif; ?>>
-					<input type="number" name="spv_expiration_password_value"  min="0" max="255" value="<?php p($_['spv_expiration_password_value']) ?>" placeholder="7">
+					<input type="number" name="spv_expiration_password_value" aria-label="<?php p($l->t('days maximum until link expires if password is set')); ?>"  min="0" max="255" value="<?php p($_['spv_expiration_password_value']) ?>" placeholder="7">
 					<span><?php p($l->t('days maximum until link expires if password is set'));?></span>
 				</label>
 			</li>
 			<li>
 				<label>
 					<input type="checkbox" name="spv_expiration_nopassword_checked" <?php if ($_['spv_expiration_nopassword_checked']): ?> checked="checked"<?php endif; ?>>
-					<input type="number" name="spv_expiration_nopassword_value"  min="0" max="255" value="<?php p($_['spv_expiration_nopassword_value']) ?>" placeholder="7">
+					<input type="number" name="spv_expiration_nopassword_value" aria-label="<?php p($l->t('days maximum until link expires if password is not set')); ?>"  min="0" max="255" value="<?php p($_['spv_expiration_nopassword_value']) ?>" placeholder="7">
 					<span><?php p($l->t('days maximum until link expires if password is not set'));?></span>
 				</label>
 			</li>
